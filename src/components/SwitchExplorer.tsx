@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Settings, Volume2, ArrowUpRight, Zap, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Settings, Volume2, ArrowUpRight, Zap, CheckCircle2, RefreshCw } from 'lucide-react';
 import { soundEngine } from '../utils/audio';
+import { SwitchExplorerSkeleton } from './Skeletons';
 
 interface SwitchBrand {
   number: string;
@@ -15,9 +17,33 @@ interface SwitchBrand {
   testedFrequency: string;
 }
 
-export const SwitchExplorer: React.FC = () => {
+interface SwitchExplorerProps {
+  isLoading?: boolean;
+}
+
+export const SwitchExplorer: React.FC<SwitchExplorerProps> = ({ isLoading }) => {
+  const [loading, setLoading] = useState(isLoading ?? true);
   const [selectedIdx, setSelectedIdx] = useState<number>(2); // Default to "03 Oetemu" just like the screenshot!
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+
+  // Handle initial perceived performance data loading
+  useEffect(() => {
+    if (isLoading !== undefined) {
+      setLoading(isLoading);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 850);
+    return () => clearTimeout(timer);
+  }, [isLoading]);
+
+  const handleSimulateReload = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 950);
+  };
 
   const switchList: SwitchBrand[] = [
     {
@@ -94,25 +120,53 @@ export const SwitchExplorer: React.FC = () => {
     <section id="switches-section" className="w-full bg-[#f6f6f4] py-20 border-b border-black/[0.06]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header matching Dribbble shot */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-black/10">
-          <div>
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#ff5722] font-semibold">
-              <span>Switch</span>
-              <Settings className="w-3.5 h-3.5" />
-            </div>
-            <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-neutral-950 tracking-tight">
-              Work Smarter, Not<br className="hidden sm:inline" />
-              Harder For Seamless
-            </h2>
-          </div>
-          <p className="max-w-md text-sm text-neutral-600 leading-relaxed font-normal">
-            The comprehensive mechanical switch engineering catalog that determines your tactile actuation, sound profile, and typing velocity.
-          </p>
-        </div>
+        <AnimatePresence mode="wait">
+          {loading ? (
+            <motion.div
+              key="switch-skeleton"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+            >
+              <SwitchExplorerSkeleton />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="switch-content"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+            >
+              {/* Section Header matching Dribbble shot */}
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-black/10">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#ff5722] font-semibold">
+                      <span>Switch</span>
+                      <Settings className="w-3.5 h-3.5" />
+                    </div>
+                    <button
+                      onClick={handleSimulateReload}
+                      title="Simulate data fetch to view shimmer skeleton"
+                      className="text-[11px] font-mono text-neutral-400 hover:text-neutral-900 flex items-center gap-1 px-2 py-0.5 rounded-md hover:bg-neutral-200/60 transition-colors cursor-pointer"
+                    >
+                      <RefreshCw className="w-3 h-3" />
+                      <span>Reload</span>
+                    </button>
+                  </div>
+                  <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-neutral-950 tracking-tight">
+                    Work Smarter, Not<br className="hidden sm:inline" />
+                    Harder For Seamless
+                  </h2>
+                </div>
+                <p className="max-w-md text-sm text-neutral-600 leading-relaxed font-normal">
+                  The comprehensive mechanical switch engineering catalog that determines your tactile actuation, sound profile, and typing velocity.
+                </p>
+              </div>
 
-        {/* Interactive Switch List (Matching Dribbble layout) */}
-        <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Interactive Switch List (Matching Dribbble layout) */}
+              <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left: Switch Names Accordion List */}
           <div className="lg:col-span-7 space-y-2">
@@ -260,6 +314,9 @@ export const SwitchExplorer: React.FC = () => {
           </div>
 
         </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
     </section>
