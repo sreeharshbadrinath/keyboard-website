@@ -1,0 +1,6 @@
+{
+  "name": "Keytron — High-Performance Mechanical Keyboards",
+  "description": "Explore Keytron high-performance mechanical keyboards engineered with minimalist modern aesthetic, CNC aluminum craftsmanship, dynamic per-key RGB, and acoustic perfection.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Architectural CAD background grid pattern */
+.bg-cad-grid {
+  background-color: #f6f6f4;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-dark-grid {
+  background-color: #0c0d12;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Custom keycap shadows */
+.keycap-shadow {
+  box-shadow: 0 4px 0 #1b1e28, 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.keycap-pressed {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #1b1e28, 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth keycap lighting */
+@keyframes rgbWave {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.animate-rgb-flow {
+  animation: rgbWave 8s linear infinite;
+}
+
+/* Floating animation */
+@keyframes floatKeyboard {
+  0%, 100% {
+    transform: translateY(0px) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(-2deg);
+  }
+}
+
+.animate-float-keyboard {
+  animation: floatKeyboard 6s ease-in-out infinite;
+}
